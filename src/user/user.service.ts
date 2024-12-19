@@ -7,14 +7,15 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayload } from 'src/common/types';
 import { AccessHistory } from './entities/access-history';
-import { ACCESS } from 'src/common/constants';
+import { ACCESS, ACCOUNT } from 'src/common/constants';
+import { Account } from 'src/account/entities/account.entity';
 
 @Injectable()
 export class UserService {
@@ -23,8 +24,11 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(AccessHistory)
     private readonly accessHistoryRepository: Repository<AccessHistory>,
+    @InjectRepository(Account)
+    private readonly accountRepository: Repository<Account>,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -37,18 +41,30 @@ export class UserService {
 
     const salt = parseInt(this.configService.get('SALT'), 10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const { id } = await this.userRepository.save({
-      userId,
-      password: hashedPassword,
-      name,
-    });
 
-    return {
-      success: true,
-      data: {
-        id,
-      },
-    };
+    return this.dataSource.manager.transaction(async (entityManager) => {
+      const newAccount = this.accountRepository.create({
+        amount: 0,
+        type: ACCOUNT.KRW,
+      });
+
+      const savedAccount = await entityManager.save(newAccount);
+
+      const newUser = this.userRepository.create({
+        userId,
+        password: hashedPassword,
+        name,
+        account: savedAccount,
+      });
+      const { id } = await entityManager.save(newUser);
+
+      return {
+        success: true,
+        data: {
+          id,
+        },
+      };
+    });
   }
 
   async login(loginUserDto: LoginUserDto) {

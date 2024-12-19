@@ -6,10 +6,11 @@ import { User } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessHistory } from './entities/access-history';
 import { JwtUserStrategy } from 'src/auth/strategies/jwt-user.strategy';
+import { Account } from 'src/account/entities/account.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, AccessHistory]),
+    TypeOrmModule.forFeature([User, AccessHistory, Account]),
     JwtModule.register({}),
   ],
   controllers: [UserController],

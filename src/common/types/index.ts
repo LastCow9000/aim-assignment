@@ -1,4 +1,4 @@
-import { ACCESS } from '../constants';
+import { ACCESS, ACCOUNT, TRANSACTION } from '../constants';
 
 export type ResponseResult = {
   success: boolean;
@@ -23,3 +23,7 @@ export type AccessTokenPayload = {
 };
 
 export type AccessType = (typeof ACCESS)[keyof typeof ACCESS];
+
+export type AccountType = (typeof ACCOUNT)[keyof typeof ACCOUNT];
+
+export type TransactionType = (typeof TRANSACTION)[keyof typeof TRANSACTION];
