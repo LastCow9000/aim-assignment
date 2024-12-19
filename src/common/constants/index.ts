@@ -12,3 +12,8 @@ export const TRANSACTION = {
   DEPOSIT: 'deposit',
   WITHDRAWAL: 'withdrawal',
 } as const;
+
+export const PORTFOLIO_RISK = {
+  AGGRESSIVE: 'aggressive',
+  MODERATE: 'moderate',
+} as const;

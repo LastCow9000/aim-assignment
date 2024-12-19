@@ -1,5 +1,5 @@
 import { Stock } from 'src/stock/entities/stock.entity';
-import { ACCESS, ACCOUNT, TRANSACTION } from '../constants';
+import { ACCESS, ACCOUNT, PORTFOLIO_RISK, TRANSACTION } from '../constants';
 
 export type ResponseResult = {
   success: boolean;
@@ -29,6 +29,8 @@ export type FindStocksResponse = ResponseResult & {
   data: Stock[];
 };
 
+export type CreatePortfolioResponse = CreateUserResponse;
+
 export type AccessTokenPayload = {
   id: number;
   userId: string;
@@ -40,3 +42,6 @@ export type AccessType = (typeof ACCESS)[keyof typeof ACCESS];
 export type AccountType = (typeof ACCOUNT)[keyof typeof ACCOUNT];
 
 export type TransactionType = (typeof TRANSACTION)[keyof typeof TRANSACTION];
+
+export type PortfolioRiskType =
+  (typeof PORTFOLIO_RISK)[keyof typeof PORTFOLIO_RISK];

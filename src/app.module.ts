@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
 import { StockModule } from './stock/stock.module';
 import { Stock } from './stock/entities/stock.entity';
+import { PortfolioModule } from './portfolio/portfolio.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Stock } from './stock/entities/stock.entity';
     AccountModule,
     StockModule,
     TypeOrmModule.forFeature([Stock]),
+    PortfolioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
