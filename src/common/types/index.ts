@@ -22,6 +22,8 @@ export type FindAccountResponse = ResponseResult & {
   };
 };
 
+export type CreateStockResponse = CreateUserResponse;
+
 export type AccessTokenPayload = {
   id: number;
   userId: string;
