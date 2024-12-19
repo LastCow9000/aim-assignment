@@ -11,6 +11,7 @@ export class StockService {
     @InjectRepository(Stock)
     private readonly stockRepository: Repository<Stock>,
   ) {}
+
   async create(createStockDto: CreateStockDto) {
     const newStock = this.stockRepository.create({
       ...createStockDto,
@@ -22,6 +23,15 @@ export class StockService {
       data: {
         id,
       },
+    };
+  }
+
+  async findAllStocks() {
+    const stocks = await this.stockRepository.find();
+
+    return {
+      success: true,
+      data: stocks,
     };
   }
 

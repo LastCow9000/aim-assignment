@@ -1,3 +1,4 @@
+import { Stock } from 'src/stock/entities/stock.entity';
 import { ACCESS, ACCOUNT, TRANSACTION } from '../constants';
 
 export type ResponseResult = {
@@ -23,6 +24,10 @@ export type FindAccountResponse = ResponseResult & {
 };
 
 export type CreateStockResponse = CreateUserResponse;
+
+export type FindStocksResponse = ResponseResult & {
+  data: Stock[];
+};
 
 export type AccessTokenPayload = {
   id: number;
