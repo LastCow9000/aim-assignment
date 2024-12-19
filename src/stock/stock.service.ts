@@ -59,7 +59,15 @@ export class StockService {
   }
 
   async remove(code: string) {
-    return;
+    const stock = await this.findStockByCode(code);
+    if (!stock) {
+      throw new NotFoundException('해당 코드의 증권을 찾을 수 없습니다.');
+    }
+
+    await this.stockRepository.remove(stock);
+    return {
+      success: true,
+    };
   }
 
   private findStockByCode(code: string) {

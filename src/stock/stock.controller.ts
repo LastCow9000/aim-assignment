@@ -39,7 +39,7 @@ export class StockController {
   }
 
   @Delete(':code')
-  remove(@Param('code') code: string) {
+  remove(@Param('code') code: string): Promise<ResponseResult> {
     return this.stockService.remove(code);
   }
 }
