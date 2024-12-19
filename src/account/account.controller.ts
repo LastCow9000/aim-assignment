@@ -15,11 +15,15 @@ export class AccountController {
     @User() user: AccessTokenPayload,
     @Param('type') type: AccountType,
   ) {
-    return this.accountService.findAccount(user, type);
+    return this.accountService.findAccount(user.id, type);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountService.update(+id, updateAccountDto);
+  @UseGuards(JwtUserGuard)
+  @Patch()
+  deposit(
+    @User() user: AccessTokenPayload,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    return this.accountService.updateAccount(user.id, updateAccountDto);
   }
 }
