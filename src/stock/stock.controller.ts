@@ -10,7 +10,11 @@ import {
 import { StockService } from './stock.service';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
-import { CreateStockResponse, FindStocksResponse } from 'src/common/types';
+import {
+  CreateStockResponse,
+  FindStocksResponse,
+  ResponseResult,
+} from 'src/common/types';
 
 @Controller('api/v1/stocks')
 export class StockController {
@@ -27,8 +31,11 @@ export class StockController {
   }
 
   @Patch(':code')
-  update(@Param('code') code: string, @Body() updateStockDto: UpdateStockDto) {
-    return this.stockService.update(code, updateStockDto);
+  updatePrice(
+    @Param('code') code: string,
+    @Body() updateStockDto: UpdateStockDto,
+  ): Promise<ResponseResult> {
+    return this.stockService.updatePrice(code, updateStockDto);
   }
 
   @Delete(':code')

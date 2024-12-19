@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,8 +35,18 @@ export class StockService {
     };
   }
 
-  async update(code: string, updateStockDto: UpdateStockDto) {
-    return;
+  async updatePrice(code: string, updateStockDto: UpdateStockDto) {
+    const stock = await this.stockRepository.findOne({ where: { code } });
+    if (!stock) {
+      throw new NotFoundException('해당 코드의 증권을 찾을 수 없습니다.');
+    }
+
+    stock.price = updateStockDto.price;
+    await this.stockRepository.save(stock);
+
+    return {
+      success: true,
+    };
   }
 
   async remove(code: string) {
