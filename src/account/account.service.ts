@@ -6,26 +6,21 @@ import {
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccountType } from 'src/common/types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { TRANSACTION } from 'src/common/constants';
 import { AccountHistory } from './entities/account-history.entity';
+import { Account } from './entities/account.entity';
 
 @Injectable()
 export class AccountService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(Account)
+    private readonly accountRepository: Repository<Account>,
     private readonly dataSource: DataSource,
   ) {}
 
   async findAccount(id: number, type: AccountType) {
-    const {
-      account: { amount },
-    } = await this.userRepository.findOne({
-      where: { id, account: { type } },
-      relations: ['account'],
-    });
+    const { amount } = await this.findAccountByTypeAndUserId(id, type);
 
     return {
       success: true,
@@ -39,12 +34,7 @@ export class AccountService {
     id: number,
     { accountType, transactionType, amount }: UpdateAccountDto,
   ) {
-    const account = (
-      await this.userRepository.findOne({
-        where: { id, account: { type: accountType } },
-        relations: ['account'],
-      })
-    )?.account;
+    const account = await this.findAccountByTypeAndUserId(id, accountType);
     if (!account) {
       throw new NotFoundException(`${accountType} 계좌가 존재하지 않습니다.`);
     }
@@ -69,6 +59,12 @@ export class AccountService {
       return {
         success: true,
       };
+    });
+  }
+
+  private findAccountByTypeAndUserId(id: number, type: AccountType) {
+    return this.accountRepository.findOne({
+      where: { type, user: { id } },
     });
   }
 }

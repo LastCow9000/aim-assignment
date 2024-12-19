@@ -2,9 +2,11 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 import { BaseEntity } from 'src/common/bases/base.entity';
 import { ACCOUNT } from 'src/common/constants';
 import { AccountType } from 'src/common/types';
-import { Column, Entity } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Column, Entity, ManyToOne, Unique } from 'typeorm';
 
 @Entity()
+@Unique(['user', 'type'])
 export class Account extends BaseEntity {
   @IsNumber()
   @IsNotEmpty()
@@ -13,4 +15,7 @@ export class Account extends BaseEntity {
 
   @Column({ type: 'enum', enum: ACCOUNT })
   type: AccountType;
+
+  @ManyToOne(() => User)
+  user: User;
 }

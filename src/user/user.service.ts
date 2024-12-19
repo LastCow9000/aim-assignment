@@ -43,25 +43,25 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     return this.dataSource.manager.transaction(async (entityManager) => {
-      const newAccount = this.accountRepository.create({
-        amount: 0,
-        type: ACCOUNT.KRW,
-      });
-
-      const savedAccount = await entityManager.save(newAccount);
-
       const newUser = this.userRepository.create({
         userId,
         password: hashedPassword,
         name,
-        account: savedAccount,
       });
-      const { id } = await entityManager.save(newUser);
+      const savedUser = await entityManager.save(newUser);
+
+      const newAccount = this.accountRepository.create({
+        amount: 0,
+        type: ACCOUNT.KRW,
+        user: savedUser,
+      });
+
+      await entityManager.save(newAccount);
 
       return {
         success: true,
         data: {
-          id,
+          id: savedUser.id,
         },
       };
     });
