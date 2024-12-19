@@ -1,7 +1,12 @@
 import { Controller, Get, Body, Patch, Param, UseGuards } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { AccessTokenPayload, AccountType } from 'src/common/types';
+import {
+  AccessTokenPayload,
+  AccountType,
+  FindAccountResponse,
+  ResponseResult,
+} from 'src/common/types';
 import { JwtUserGuard } from 'src/auth/guards/jwt-user.guard';
 import { User } from 'src/common/decorators/user.decorator';
 
@@ -14,7 +19,7 @@ export class AccountController {
   findAccount(
     @User() user: AccessTokenPayload,
     @Param('type') type: AccountType,
-  ) {
+  ): Promise<FindAccountResponse> {
     return this.accountService.findAccount(user.id, type);
   }
 
@@ -23,7 +28,7 @@ export class AccountController {
   deposit(
     @User() user: AccessTokenPayload,
     @Body() updateAccountDto: UpdateAccountDto,
-  ) {
+  ): Promise<ResponseResult> {
     return this.accountService.updateAccount(user.id, updateAccountDto);
   }
 }

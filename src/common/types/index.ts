@@ -16,6 +16,12 @@ export type LoginUserResponse = ResponseResult & {
   };
 };
 
+export type FindAccountResponse = ResponseResult & {
+  data: {
+    amount: number;
+  };
+};
+
 export type AccessTokenPayload = {
   id: number;
   userId: string;
