@@ -58,6 +58,28 @@ export class PortfolioService {
     };
   }
 
+  async findDetail(userId: number, portfolioId: number) {
+    const portfolio = await this.portfolioRepository.findOne({
+      where: { id: portfolioId, user: { id: userId } },
+      relations: ['portfolioStocks.stock'],
+    });
+    if (!portfolio) {
+      throw new NotFoundException('해당 포트폴리오가 존재하지 않습니다.');
+    }
+
+    const data = portfolio.portfolioStocks.map(
+      ({ stock: { code, name }, quantity, purchasePrice, createdAt }) => ({
+        code,
+        name,
+        quantity,
+        purchasePrice,
+        purchaseDate: createdAt,
+      }),
+    );
+
+    return { success: true, data };
+  }
+
   async executeAdvice(
     userId: number,
     portfolioId: number,

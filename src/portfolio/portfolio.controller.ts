@@ -8,6 +8,7 @@ import {
   AccountType,
   CreatePortfolioResponse,
   FindAllPortfolioResponse,
+  FindPortfolioDetailResponse,
   ResponseResult,
 } from 'src/common/types';
 import { ACCOUNT } from 'src/common/constants';
@@ -43,5 +44,14 @@ export class PortfolioController {
   @Get()
   findAll(@User() user: AccessTokenPayload): Promise<FindAllPortfolioResponse> {
     return this.portfolioService.findAll(user.id);
+  }
+
+  @UseGuards(JwtUserGuard)
+  @Get(':portfolio_id')
+  findDetail(
+    @User() user: AccessTokenPayload,
+    @Param('portfolio_id') portfolioId: number,
+  ): Promise<FindPortfolioDetailResponse> {
+    return this.portfolioService.findDetail(user.id, portfolioId);
   }
 }

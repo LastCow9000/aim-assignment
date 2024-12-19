@@ -36,6 +36,16 @@ export type FindAllPortfolioResponse = ResponseResult & {
   data: Portfolio[];
 };
 
+export type FindPortfolioDetailResponse = ResponseResult & {
+  data: {
+    code: string;
+    name: string;
+    quantity: number;
+    purchasePrice: number;
+    purchaseDate: Date;
+  }[];
+};
+
 export type AccessTokenPayload = {
   id: number;
   userId: string;
