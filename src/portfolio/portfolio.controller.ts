@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Param } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Param, Get } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { JwtUserGuard } from 'src/auth/guards/jwt-user.guard';
@@ -7,6 +7,7 @@ import {
   AccessTokenPayload,
   AccountType,
   CreatePortfolioResponse,
+  FindAllPortfolioResponse,
   ResponseResult,
 } from 'src/common/types';
 import { ACCOUNT } from 'src/common/constants';
@@ -36,5 +37,11 @@ export class PortfolioController {
       portfolioId,
       accountType,
     );
+  }
+
+  @UseGuards(JwtUserGuard)
+  @Get()
+  findAll(@User() user: AccessTokenPayload): Promise<FindAllPortfolioResponse> {
+    return this.portfolioService.findAll(user.id);
   }
 }

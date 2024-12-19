@@ -1,5 +1,6 @@
 import { Stock } from 'src/stock/entities/stock.entity';
 import { ACCESS, ACCOUNT, PORTFOLIO_RISK, TRANSACTION } from '../constants';
+import { Portfolio } from 'src/portfolio/entities/portfolio.entity';
 
 export type ResponseResult = {
   success: boolean;
@@ -30,6 +31,10 @@ export type FindStocksResponse = ResponseResult & {
 };
 
 export type CreatePortfolioResponse = CreateUserResponse;
+
+export type FindAllPortfolioResponse = ResponseResult & {
+  data: Portfolio[];
+};
 
 export type AccessTokenPayload = {
   id: number;

@@ -47,6 +47,17 @@ export class PortfolioService {
     };
   }
 
+  async findAll(userId: number) {
+    const portfolios = await this.portfolioRepository.find({
+      where: { user: { id: userId } },
+    });
+
+    return {
+      success: true,
+      data: portfolios,
+    };
+  }
+
   async executeAdvice(
     userId: number,
     portfolioId: number,
