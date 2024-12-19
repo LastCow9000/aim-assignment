@@ -14,6 +14,7 @@
 
    ```bash
    $ git clone https://github.com/LastCow9000/aim-assignment.git
+   $ cd aim-assignment
    ```
 
 2. .env 파일을 생성하여 아래의 내용을 넣습니다.
