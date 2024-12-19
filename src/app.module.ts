@@ -14,7 +14,7 @@ import { PortfolioModule } from './portfolio/portfolio.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'host.docker.internal',
       port: 3309,
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,

@@ -1,6 +1,22 @@
 version: '3'
 
 services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3003:3000'
+    environment:
+      - PORT=${PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
   mysql:
     container_name: mysql_local
     image: mysql:8.0
@@ -16,3 +32,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - TZ=Asia/Seoul
+
+networks:
+  app-network:
+    driver: bridge
