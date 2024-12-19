@@ -75,7 +75,14 @@ export class UserService {
     return this.getAccessToken(findedUser);
   }
 
-  getAccessToken({ id, userId, name }: User) {
+  async logout({ id }: AccessTokenPayload) {
+    await this.accessHistoryRepository.save({
+      user: { id },
+      type: ACCESS.LOGOUT,
+    });
+  }
+
+  private getAccessToken({ id, userId, name }: User) {
     const payload: AccessTokenPayload = {
       id,
       userId,
@@ -84,7 +91,7 @@ export class UserService {
 
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
-      expiresIn: '600',
+      expiresIn: '600000',
     });
   }
 }

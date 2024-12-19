@@ -1,9 +1,16 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { CreateUserResponse, LoginUserResponse } from 'src/common/types';
+import {
+  AccessTokenPayload,
+  CreateUserResponse,
+  LoginUserResponse,
+  ResponseResult,
+} from 'src/common/types';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Response } from 'express';
+import { JwtUserGuard } from 'src/auth/guards/jwt-user.guard';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('api/v1/users')
 export class UserController {
@@ -26,6 +33,21 @@ export class UserController {
     return {
       success: true,
       data: { accessToken },
+    };
+  }
+
+  @Post('/logout')
+  @UseGuards(JwtUserGuard)
+  logout(
+    @User() user: AccessTokenPayload,
+    @Res({ passthrough: true }) res: Response,
+  ): ResponseResult {
+    this.userService.logout(user);
+    res.setHeader('Authorization', null);
+    res.clearCookie('access_token');
+
+    return {
+      success: true,
     };
   }
 }

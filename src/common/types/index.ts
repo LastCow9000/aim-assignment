@@ -1,16 +1,16 @@
 import { ACCESS } from '../constants';
 
-type Result = {
+export type ResponseResult = {
   success: boolean;
 };
 
-export type CreateUserResponse = Result & {
+export type CreateUserResponse = ResponseResult & {
   data: {
     id: number;
   };
 };
 
-export type LoginUserResponse = Result & {
+export type LoginUserResponse = ResponseResult & {
   data: {
     accessToken: string;
   };
