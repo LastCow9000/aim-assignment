@@ -12,6 +12,9 @@ export class AccountHistory extends BaseEntity {
   @Column()
   amount: number;
 
+  @Column({ nullable: true })
+  description: string;
+
   @ManyToOne(() => Account)
   account: Account;
 }

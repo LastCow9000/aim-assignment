@@ -53,6 +53,7 @@ export class AccountService {
           account,
           amount,
           type: transactionType,
+          description: `유저 ${transactionType === TRANSACTION.DEPOSIT ? '입금' : '출금'}`,
         });
       await entityManager.save(newAccountHistory);
 
