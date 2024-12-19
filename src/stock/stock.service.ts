@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +17,11 @@ export class StockService {
   ) {}
 
   async create(createStockDto: CreateStockDto) {
+    const isExist = await this.findStockByCode(createStockDto.code);
+    if (isExist) {
+      throw new ConflictException('이미 존재하는 증권 코드 입니다.');
+    }
+
     const newStock = this.stockRepository.create({
       ...createStockDto,
     });
@@ -36,7 +45,7 @@ export class StockService {
   }
 
   async updatePrice(code: string, updateStockDto: UpdateStockDto) {
-    const stock = await this.stockRepository.findOne({ where: { code } });
+    const stock = await this.findStockByCode(code);
     if (!stock) {
       throw new NotFoundException('해당 코드의 증권을 찾을 수 없습니다.');
     }
@@ -51,5 +60,9 @@ export class StockService {
 
   async remove(code: string) {
     return;
+  }
+
+  private findStockByCode(code: string) {
+    return this.stockRepository.findOne({ where: { code } });
   }
 }
