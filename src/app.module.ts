@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
 import { StockModule } from './stock/stock.module';
+import { Stock } from './stock/entities/stock.entity';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { StockModule } from './stock/stock.module';
     UserModule,
     AccountModule,
     StockModule,
+    TypeOrmModule.forFeature([Stock]),
   ],
   controllers: [AppController],
   providers: [AppService],
